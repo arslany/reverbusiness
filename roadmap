@@ -1,0 +1,10 @@
+https://github.com/brunolellis/javalin-java-example/tree/master
+https://github.com/mvysny/jdbi-orm-vaadin-crud-demo/blob/master/src/main/java/com/vaadin/starter/skeleton/Person.java
+Login service
+authenticate user
+return token and user principle.
+implement log out
+implement token check
+implement token verification
+implement token expiry
+implement user service
