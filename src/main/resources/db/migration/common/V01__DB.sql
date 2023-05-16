@@ -7,10 +7,10 @@ create table Person (
   modified timestamp,
   alive boolean,
   maritalStatus varchar(200)
-)
+);
 CREATE TABLE
-  USER (
-    id serial NOT NULL,
+  USERS (
+    id bigserial NOT NULL,
     username character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
@@ -20,6 +20,6 @@ CREATE TABLE
   );
 
 ALTER TABLE
-  USER
+  USERS
 ADD
-  CONSTRAINT user_pkey PRIMARY KEY (id)
+  CONSTRAINT user_pkey PRIMARY KEY (id);
