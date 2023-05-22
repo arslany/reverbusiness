@@ -1,4 +1,7 @@
+import controller.UserController;
 import database.uitl.DatabaseUtils;
+import exception.CustomException;
+import exception.CustomExceptionHandler;
 import io.javalin.Javalin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +9,7 @@ import util.PropertyManager;
 
 import java.util.Objects;
 
-import static io.javalin.apibuilder.ApiBuilder.crud;
-import static io.javalin.apibuilder.ApiBuilder.get;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Main {
 
@@ -37,24 +39,34 @@ public class Main {
         //run updated script
         DatabaseUtils.updateDatabase();
 
-        Javalin.create(config -> {
+        //Create a Javalin instance with some configuration options
+        Javalin app = Javalin.create(config -> {
             config.http.defaultContentType = "application/json";
             config.http.generateEtags = true;
             config.http.asyncTimeout = 10000l;
-           })
-                .routes(
-                        () -> {
-                            crud("/hello/{hello-id}", new HelloWorldController());
-                            //crud("/users/:user-id", usersHandler);
-                            //crud("/login/:login-id", new LoginController());
+        });
+        app.exception(CustomException.class, new CustomExceptionHandler());
+        //Define the routes for the app
+        app.routes(() -> {
+        //Use crud methods for hello and user resources
+            crud("/hello/{hello-id}", new HelloWorldController());
+            crud("/user/{user-id}", new UserController());
+        //Use get method for finding user by username
+            get("/users/username/{username}", ctx -> {
+                new UserController().findByUserName(ctx, ctx.pathParam("username"));
+            });
+        //Use post method for logging in user with credentials
+            get("/login", ctx -> {
+                new UserController().login(ctx);
+            });
+        //Use get method for the root path
+            get("/", ctx -> {
+                ctx.result("up and running");
+            });
+        });
 
-                            get("/", ctx -> {
-                                ctx.result("up and running");
-
-                            });
-                        }
-                )
-                .start(REST_PORT);
+        //Start the app on the specified port
+                app.start(REST_PORT);
 
     }
 

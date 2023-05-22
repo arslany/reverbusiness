@@ -10,7 +10,7 @@ public class PersonDao extends Dao<Person, Long> {
      * protected so that PersonDao won't pop up in the IDE auto-completion
      * dialog when you type in {@code new Person}.
      */
-    protected PersonDao() {
+    public PersonDao() {
         super(Person.class);
     }
 
