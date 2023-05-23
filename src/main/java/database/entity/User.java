@@ -1,5 +1,6 @@
 package database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gitlab.mvysny.jdbiorm.Entity;
 import com.gitlab.mvysny.jdbiorm.Table;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class User implements Entity<Long> {
     private String userName;
 
     @NotNull
+    @JsonIgnore
     @Size(min = 8, max = 12)
     private String password;
 
