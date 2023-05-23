@@ -46,7 +46,7 @@ public class User implements Entity<Long> {
 
     @Override
     public void setId(Long aLong) {
-        this.id = id;
+        this.id = aLong;
     }
 
     public String getUserName() {
