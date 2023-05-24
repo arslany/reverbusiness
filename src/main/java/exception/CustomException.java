@@ -9,6 +9,7 @@ public class CustomException extends RuntimeException {
         INTERNAL_SERVER_ERROR(1004, "An unexpected error occurred on the server"),
         RECORD_NOT_FOUND(1005, "The requested record not found"),
         USER_NOT_FOUND(1005, "The requested user %s not found"),
+        INVALID_USER_NAME_OR_PASSWORD(1006, "Invalid user name or password"),
         ;
 
         private final int code;

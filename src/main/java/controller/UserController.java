@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Util;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -25,8 +26,19 @@ public class UserController implements CrudHandler {
     public void login(Context context){
 
         UserCredentials user = context.bodyAsClass(UserCredentials.class);
-        context.json(user);
-        context.status(201);
+        if (!Util.isNullOrEmpty(user.getUsername()) && (!Util.isNullOrEmpty(user.getPassword()))) {
+            //TODO find user
+            //decrypt its password
+            //validate it i.e. if user is active, not already logged in, and its password is not already expired
+            //return token
+
+            context.json(user);
+            context.status(201);
+        }
+        else{
+            throw new CustomException(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD);
+        }
+
     }
 
     @Override
