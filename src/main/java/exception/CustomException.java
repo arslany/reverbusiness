@@ -10,6 +10,8 @@ public class CustomException extends RuntimeException {
         RECORD_NOT_FOUND(1005, "The requested record not found"),
         USER_NOT_FOUND(1005, "The requested user %s not found"),
         INVALID_USER_NAME_OR_PASSWORD(1006, "Invalid user name or password"),
+        USER_ALREADY_LOGGED_IN(1007,"User already logged in"),
+        AUTHENTICATION_REQUIRED(1008,"Authentication required")
         ;
 
         private final int code;

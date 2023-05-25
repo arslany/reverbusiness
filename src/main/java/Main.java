@@ -5,11 +5,12 @@ import exception.CustomExceptionHandler;
 import io.javalin.Javalin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.AccessPointRoles;
 import util.PropertyManager;
+import util.ServicesAccessManager;
 
-import java.util.Objects;
-
-import static io.javalin.apibuilder.ApiBuilder.*;
+import static io.javalin.apibuilder.ApiBuilder.crud;
+import static io.javalin.apibuilder.ApiBuilder.get;
 
 public class Main {
 
@@ -44,6 +45,7 @@ public class Main {
             config.http.defaultContentType = "application/json";
             config.http.generateEtags = true;
             config.http.asyncTimeout = 10000l;
+            config.accessManager(new ServicesAccessManager());
         });
         app.exception(CustomException.class, new CustomExceptionHandler());
         //Define the routes for the app
@@ -58,11 +60,12 @@ public class Main {
         //Use post method for logging in user with credentials
             get("/login", ctx -> {
                 new UserController().login(ctx);
-            });
+            }, AccessPointRoles.ANYONE);
+
         //Use get method for the root path
             get("/", ctx -> {
                 ctx.result("up and running");
-            });
+            }, AccessPointRoles.ANYONE);
         });
 
         //Start the app on the specified port

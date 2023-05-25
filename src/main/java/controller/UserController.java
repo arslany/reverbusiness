@@ -14,7 +14,11 @@ import org.slf4j.LoggerFactory;
 import util.Util;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
+import static util.Util.isUserAlreadyLoggedIn;
 
 public class UserController implements CrudHandler {
 
@@ -27,13 +31,29 @@ public class UserController implements CrudHandler {
 
         UserCredentials user = context.bodyAsClass(UserCredentials.class);
         if (!Util.isNullOrEmpty(user.getUsername()) && (!Util.isNullOrEmpty(user.getPassword()))) {
-            //TODO find user
-            //decrypt its password
-            //validate it i.e. if user is active, not already logged in, and its password is not already expired
-            //return token
+            Optional<@Nullable User> result = Optional.ofNullable(dao.findByUserNameAndPassword(user.getUsername(), user.getPassword()));
+            if (result.isPresent()) {
+                //TODO
+                //validate it i.e. if user is active, not already logged in, and its password is not already expired
 
-            context.json(user);
-            context.status(201);
+                //before generating a token check if user is already logged in
+                if (isUserAlreadyLoggedIn(user.getUsername()))
+                    throw new CustomException(CustomException.ErrorCode.USER_ALREADY_LOGGED_IN);
+
+                String token = Util.generateNewUUID(user.getUsername());
+                Optional<@Nullable User> userPrinciple = Optional.ofNullable(dao.findByUserName(user.getUsername()));
+                if (userPrinciple.isPresent()) {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("Token", token);
+                    data.put("user", userPrinciple.get());
+                    context.json(data);
+                    context.status(HttpStatus.OK);
+                    context.status(201);
+                }
+            }
+            else{
+                throw new CustomException(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD);
+            }
         }
         else{
             throw new CustomException(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD);
