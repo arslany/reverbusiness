@@ -1,5 +1,9 @@
 package exception;
 
+/**
+ * Custom Exception class
+ */
+
 public class CustomException extends RuntimeException {
 
     public enum ErrorCode {

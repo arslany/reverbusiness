@@ -8,6 +8,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is responsible for the all the user related CRUD tasks.
+ */
 public class UserDao extends Dao<User, Long> {
 
     public UserDao() {

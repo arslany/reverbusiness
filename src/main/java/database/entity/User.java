@@ -10,6 +10,9 @@ import org.jdbi.v3.core.mapper.reflect.ColumnName;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Entity class for user
+ */
 @Table("Users")
 public class User implements Entity<Long> {
 

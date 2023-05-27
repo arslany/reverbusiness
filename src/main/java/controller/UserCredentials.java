@@ -1,5 +1,9 @@
 package controller;
 
+/**
+ * This class will simply hold the user name and password coming from login rest end point
+ */
+
 public class UserCredentials {
 
     //The username of the user

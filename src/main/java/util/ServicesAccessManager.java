@@ -9,9 +9,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+/**
+ * This clas is responsible to validate the roles of a user who have requested to acces an
+ * end point. If a roll contain AccessPointRoles.ANYONE (so far login service) then that end point
+ * is access to every caller. For all the other rest points, header will be checked for a valid
+ * token and only then access will be granted. Otherwise exception will be thrown
+ */
 public class ServicesAccessManager implements AccessManager {
-
-
     @Override
     public void manage(@NotNull Handler handler, @NotNull Context context, @NotNull Set<? extends RouteRole> set) throws Exception {
 

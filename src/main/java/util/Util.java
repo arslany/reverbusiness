@@ -22,6 +22,11 @@ public class Util {
      */
     private static final long TTL = 60;
 
+    /**
+     * This will generate a new token for a user.
+     * @param userName
+     * @return
+     */
     public synchronized static String generateNewUUID(String userName) {
         String newUUID = UUID.randomUUID().toString().replace("-", "");
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -29,6 +34,15 @@ public class Util {
         validUUid.computeIfAbsent(newUUID, k -> new HashMap<>()).put(userName, localTime);
         return newUUID;
     }
+
+    /**
+     * This method will check if the time to live for supplied token is expired. if Yes then
+     * this token is removed from the map and then a false is returned. Otherwise a new expiry
+     * time is allocated to this token.
+     * token is elapsed.
+     * @param uuid
+     * @return
+     */
 
     public static boolean validateToken(String uuid){
 
@@ -59,6 +73,11 @@ public class Util {
 
     }
 
+    /**
+     * This method will check if a token is already present against the user
+     * @param userName
+     * @return
+     */
     public static boolean isUserAlreadyLoggedIn(String userName) {
 
         boolean found = validUUid.values().stream()
