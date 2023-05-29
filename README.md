@@ -16,5 +16,5 @@ https://mvysny.github.io/mvc-mvp-mvvm-no-thanks/
 
 https://mvysny.github.io/component-oriented-programming/
 
-Next: add context Create login page add database access add service for authentication and authorization create logout machinsam
+
 
