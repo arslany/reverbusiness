@@ -79,10 +79,17 @@ public class Util {
      * @return
      */
     public static boolean isUserAlreadyLoggedIn(String userName) {
-
         boolean found = validUUid.values().stream()
                 .anyMatch(innerMap -> innerMap.containsKey(userName));
         return found;
+    }
+
+    public static void logout(String userName) {
+        // Assuming validUUid is a Map<String, Map<String, String>>
+        validUUid.entrySet().stream()
+                .filter(entry -> entry.getValue().containsKey(userName)) // This will filter the outer map entries that have the inner map with userName
+                .map(entry -> entry.getKey()) // This will get the keys of those entries
+                .forEach(key -> validUUid.remove(key)); // This will remove those keys from the outer map
 
     }
 

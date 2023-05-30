@@ -125,6 +125,12 @@ public class User implements Entity<Long> {
         return Objects.hash(id);
     }
 
+    /**
+     * QUESTION: What is the difference between save and create
+     * @param validate
+     */
+
+
     @Override
     public void save(boolean validate) {
         // always override the save(boolean) method, and not save().

@@ -15,7 +15,11 @@ public class CustomException extends RuntimeException {
         USER_NOT_FOUND(1005, "The requested user %s not found"),
         INVALID_USER_NAME_OR_PASSWORD(1006, "Invalid user name or password"),
         USER_ALREADY_LOGGED_IN(1007,"User already logged in"),
-        AUTHENTICATION_REQUIRED(1008,"Authentication required")
+        AUTHENTICATION_REQUIRED(1008,"Authentication required"),
+        PERMISSIONS_CODE_MANDATORY(1009,"Permissions code is mandatory"),
+        PERMISSIONS_NAME_MANDATORY(1010,"Permissions name is mandatory"),
+        PERMISSIONS_DESCRIPTION_MANDATORY(1011,"Permissions description is mandatory"),
+        PERMISSIONS_ACTIVE_MANDATORY(1012,"Permissions active is mandatory")
         ;
 
         private final int code;

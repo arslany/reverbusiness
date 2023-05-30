@@ -1,6 +1,7 @@
 package controller;
 
 import database.dao.UserDao;
+import database.dto.UserPrinciple;
 import database.entity.User;
 import exception.CustomException;
 import io.javalin.apibuilder.CrudHandler;
@@ -126,6 +127,11 @@ public class UserController implements CrudHandler {
         // Currently user entity is directly returned. Instead a user principle class needs to be created and its should be returned.
         // END TODO
         if (result.isPresent()) {
+            UserPrinciple userPrinciple = new UserPrinciple();
+            User user = result.get();
+            userPrinciple.setUserFirstName(user.getUserName());
+            userPrinciple.setUserLastName(user.getSurname());
+
             context.json(result.get());
             context.status(HttpStatus.OK);
         } else {

@@ -1,3 +1,5 @@
+import controller.LoginController;
+import controller.PermissionsController;
 import controller.UserController;
 import database.uitl.DatabaseUtils;
 import exception.CustomException;
@@ -9,8 +11,7 @@ import util.AccessPointRoles;
 import util.PropertyManager;
 import util.ServicesAccessManager;
 
-import static io.javalin.apibuilder.ApiBuilder.crud;
-import static io.javalin.apibuilder.ApiBuilder.get;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Main {
 
@@ -50,19 +51,23 @@ public class Main {
         app.exception(CustomException.class, new CustomExceptionHandler());
         //Define the routes for the app
         app.routes(() -> {
-        //Use crud methods for hello and user resources
+            //Use crud methods for hello and user resources
             crud("/hello/{hello-id}", new HelloWorldController());
             crud("/user/{user-id}", new UserController());
-        //Use get method for finding user by username
+            crud("/permissions/{permission-id}", new PermissionsController());
+            //Use get method for finding user by username
             get("/users/username/{username}", ctx -> {
                 new UserController().findByUserName(ctx, ctx.pathParam("username"));
             });
-        //Use post method for logging in user with credentials
+            //Use post method for logging in user with credentials
             get("/login", ctx -> {
                 new UserController().login(ctx);
             }, AccessPointRoles.ANYONE);
+            post("/logout",ctx -> {
+               new LoginController().logout(ctx, ctx.pathParam("userName"));
+            });
 
-        //Use get method for the root path
+            //Use get method for the root path
             get("/", ctx -> {
                 ctx.result("up and running");
             }, AccessPointRoles.ANYONE);
