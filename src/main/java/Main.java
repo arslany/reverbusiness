@@ -60,7 +60,7 @@ public class Main {
                 new UserController().findByUserName(ctx, ctx.pathParam("username"));
             });
             //Use post method for logging in user with credentials
-            get("/login", ctx -> {
+            post("/login", ctx -> {
                 new UserController().login(ctx);
             }, AccessPointRoles.ANYONE);
             post("/logout",ctx -> {

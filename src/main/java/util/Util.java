@@ -45,9 +45,10 @@ public class Util {
      */
 
     public static boolean validateToken(String uuid){
-
-        //strip out Bearer
-        String token = uuid.substring(7, uuid.length());
+        String token = uuid;
+        //check if token have Bearer in it.
+        if (uuid.contains("Bearer"))
+            token = uuid.substring(7, uuid.length());       //strip out Bearer
 
         Map<String, LocalTime> uuidInfo = validUUid.get(token);
         if (null == uuidInfo || uuidInfo.isEmpty())
@@ -78,10 +79,20 @@ public class Util {
      * @param userName
      * @return
      */
-    public static boolean isUserAlreadyLoggedIn(String userName) {
-        boolean found = validUUid.values().stream()
-                .anyMatch(innerMap -> innerMap.containsKey(userName));
-        return found;
+    public static String isUserAlreadyLoggedIn(String userName) {
+
+        String token = null;
+
+        Optional<String> key = validUUid.entrySet().stream()
+                .filter(entry -> entry.getValue().containsKey(userName))
+                .map(entry -> entry.getKey())
+                .findFirst();
+
+        if (key.isPresent()) {
+            if(validateToken(key.get()))
+                token = key.get();
+        }
+        return token;
     }
 
     public static void logout(String userName) {

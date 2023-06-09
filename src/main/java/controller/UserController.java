@@ -43,6 +43,18 @@ public class UserController implements CrudHandler {
      */
     public void login(Context context){
         UserCredentials user = context.bodyAsClass(UserCredentials.class);
+
+        //before generating a token check if user is already logged in
+        String previousToken = isUserAlreadyLoggedIn(user.getUsername());
+        if (null != previousToken) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("Token", previousToken);
+            data.put("user", CustomException.ErrorCode.USER_ALREADY_LOGGED_IN.getDescription());
+            context.json(data);
+            context.status(HttpStatus.OK);
+            return;
+        }
+
         if (!Util.isNullOrEmpty(user.getUsername()) && (!Util.isNullOrEmpty(user.getPassword()))) {
             Optional<@Nullable User> result = Optional.ofNullable(dao.findByUserNameAndPassword(user.getUsername(), user.getPassword()));
             if (result.isPresent()) {
@@ -52,11 +64,6 @@ public class UserController implements CrudHandler {
                 // 2. not already logged in,
                 // 3. password is not expired
                 //END TODO
-
-                //before generating a token check if user is already logged in
-                if (isUserAlreadyLoggedIn(user.getUsername()))
-                    throw new CustomException(CustomException.ErrorCode.USER_ALREADY_LOGGED_IN);
-
                 String token = Util.generateNewUUID(user.getUsername());
                 Optional<@Nullable User> userPrinciple = Optional.ofNullable(dao.findByUserName(user.getUsername()));
                 if (userPrinciple.isPresent()) {
@@ -68,11 +75,13 @@ public class UserController implements CrudHandler {
                 }
             }
             else{
-                throw new CustomException(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD);
+                context.result(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD.getDescription());
+                context.status(HttpStatus.UNAUTHORIZED);
             }
         }
         else{
-            throw new CustomException(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD);
+            context.result(CustomException.ErrorCode.INVALID_USER_NAME_OR_PASSWORD.getDescription());
+            context.status(HttpStatus.UNAUTHORIZED);
         }
     }
 
