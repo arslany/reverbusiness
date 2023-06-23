@@ -29,8 +29,8 @@ public class UserController implements CrudHandler {
 
     @org.jetbrains.annotations.NotNull
     public static final UserDao dao = new UserDao();
-
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private Optional<@Nullable User> loggedInUserPrinciple;
 
     /**
      * This method will generate a token after authenticating the user with a supplied password. If no user exists in database then
@@ -49,7 +49,8 @@ public class UserController implements CrudHandler {
         if (null != previousToken) {
             Map<String, Object> data = new HashMap<>();
             data.put("Token", previousToken);
-            data.put("user", CustomException.ErrorCode.USER_ALREADY_LOGGED_IN.getDescription());
+            data.put("user", loggedInUserPrinciple.get());
+            data.put("message", CustomException.ErrorCode.USER_ALREADY_LOGGED_IN.getDescription());
             context.json(data);
             context.status(HttpStatus.OK);
             return;
@@ -65,13 +66,14 @@ public class UserController implements CrudHandler {
                 // 3. password is not expired
                 //END TODO
                 String token = Util.generateNewUUID(user.getUsername());
-                Optional<@Nullable User> userPrinciple = Optional.ofNullable(dao.findByUserName(user.getUsername()));
-                if (userPrinciple.isPresent()) {
+                loggedInUserPrinciple = Optional.ofNullable(dao.findByUserName(user.getUsername()));
+                if (loggedInUserPrinciple.isPresent()) {
                     Map<String, Object> data = new HashMap<>();
                     data.put("Token", token);
-                    data.put("user", userPrinciple.get());
+                    data.put("user", loggedInUserPrinciple.get());
                     context.json(data);
                     context.status(HttpStatus.OK);
+                    log.info("User successfully logged in");
                 }
             }
             else{
